@@ -87,5 +87,41 @@ public class TemperatureRestController {
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
 
+    @Transactional
+    @RequestMapping(value = "/temperature/{sensorId}", method = RequestMethod.PUT)
+    public ResponseEntity<Void> updateTemperature(@PathVariable("sensorId") String sensorId,
+                                                  @RequestBody Temperature temperature) {
+        Temperature storedTemperature = temperatureMapper.findOneBySensorId(sensorId);
+
+        if (storedTemperature == null) {
+            System.out.println("No temperature sensor with id (" + sensorId + " not found");
+            return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+        }
+
+        storedTemperature.setTemperature(temperature.getTemperature());
+        storedTemperature.setLocation(temperature.getLocation());
+        storedTemperature.setDatetime(temperature.getDatetime());
+
+        temperatureMapper.update(storedTemperature);
+
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @Transactional
+    @RequestMapping(value = "/temperature/{sensorId}", method = RequestMethod.DELETE)
+    public ResponseEntity<Temperature> deleteTemperature(@PathVariable("sensorId") String sensorId) {
+        Temperature storedTemperature = temperatureMapper.findOneBySensorId(sensorId);
+
+        if (storedTemperature == null) {
+            System.out.println("No temperature sensor with id (" + sensorId + " not found");
+            return new ResponseEntity<Temperature>(HttpStatus.NOT_FOUND);
+        }
+
+        temperatureMapper.delete(storedTemperature.getId());
+
+        return new ResponseEntity<Temperature>(HttpStatus.NO_CONTENT);
+    }
+
+
 
 }
