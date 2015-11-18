@@ -13,23 +13,7 @@ public class HomeController {
 
     @Value("${env.text}")
     private String env;
-
-    @ModelAttribute("name")
-    private String getName() {
-        return "IamHomeControllerModelAttribute";
-    }
-
-    @RequestMapping
-    public String home(Model model) {
-        model.addAttribute("textFromController", "World");
-        return "hello";
-    }
-
-    @RequestMapping("/env")
-    public String env(Model model) {
-        model.addAttribute("textFromController", env);
-        return "hello";
-    }
+    
 
     @RequestMapping("/requestParamTest")
     public String requestParamTest(@RequestParam(name = "a", required=false, defaultValue = "0") int a,
