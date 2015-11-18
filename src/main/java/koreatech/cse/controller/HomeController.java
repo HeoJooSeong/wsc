@@ -71,4 +71,16 @@ public class HomeController {
     public String requestMappingPostTest() {
         return "hello";
     }
+
+    @RequestMapping(value = "/daum_book_request", method = RequestMethod.GET)
+    public String daumBookRequest(Model model, @RequestParam(name = "userId") String userId) {
+        model.addAttribute("userId", userId);
+        return "daumBookRequest";
+    }
+
+    @RequestMapping(value = "/facebook_likes_request", method = RequestMethod.GET)
+    public String facebookFriendsRequest(Model model, @RequestParam(name = "userId") String userId) {
+        model.addAttribute("userId", userId);
+        return "facebookLikesRequest";
+    }
 }

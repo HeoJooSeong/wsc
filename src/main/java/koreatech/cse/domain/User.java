@@ -1,11 +1,20 @@
 package koreatech.cse.domain;
 
-public class User {
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
+
+public class User implements UserDetails {
     private int id;
     private String name;
     private String email;
     private String password;
     private int age;
+
+    private List<Authority> authorities;
 
     public int getId() {
         return id;
@@ -31,8 +40,37 @@ public class User {
         this.email = email;
     }
 
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    public String getUsername() {
+        return email;
+    }
+
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    public boolean isEnabled() {
+        return true;
+    }
+
+
+    public void setAuthorities(List<Authority> authorities) {
+        this.authorities = authorities;
     }
 
     public void setPassword(String password) {
@@ -46,9 +84,25 @@ public class User {
     public void setAge(int age) {
         this.age = age;
     }
+
+    public static User current() {
+        try {
+            return (User) SecurityContextHolder.getContext()
+                    .getAuthentication().getPrincipal();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     @Override
     public String toString() {
-        return "id: " + id + ", name: " + name
-                + ", email: " + email + ", password: " + password + ", age: " + age;
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", age=" + age +
+                ", authorities=" + authorities +
+                '}';
     }
 }

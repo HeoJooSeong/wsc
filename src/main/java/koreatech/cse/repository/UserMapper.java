@@ -21,6 +21,9 @@ public interface UserMapper {
     @Select("SELECT * FROM USERS WHERE ID = #{id}")
     User findOne(@Param("id") int id);
 
+    @Select("SELECT * FROM USERS WHERE EMAIL = #{email}")
+    User findByEmail(@Param("email") String email);
+
     @Delete("DELETE FROM USERS WHERE ID = #{id}")
     void delete(@Param("id") int id);
 
@@ -34,5 +37,8 @@ public interface UserMapper {
             + "<if test='orderParam != null'>ORDER BY ${orderParam} DESC</if>"
             + "</script>")
     List<User> findByScript(Searchable searchable);
+
+    @Select("SELECT count(*) FROM AUTHORITIES")
+    int count();
 
 }
