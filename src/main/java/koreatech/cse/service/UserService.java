@@ -45,17 +45,20 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));	// 사용자의 실제 비밀번호를 sha-256로 암호화함
         userMapper.insert(user);
 
-        Authority authority = new Authority();
-        authority.setUserId(user.getId());
-        authority.setRole("ROLE_USER");
-        authorityMapper.insert(authority);
-
         if(user.getEmail().contains("admin")) {
             Authority adminAuthority = new Authority();
             adminAuthority.setUserId(user.getId());
             adminAuthority.setRole("ROLE_ADMIN");
             authorityMapper.insert(adminAuthority);
         }
+        else {
+
+            Authority authority = new Authority();
+            authority.setUserId(user.getId());
+            authority.setRole("ROLE_USER");
+            authorityMapper.insert(authority);
+        }
+
 
         System.out.println("user created :" + new Date());
         return true;
